@@ -1,0 +1,14 @@
+module HelloWorld where
+import Daml.Script
+
+
+-- Creating a function name hello where it take Text and return a Text
+hello : Text -> Text
+hello x ="Hello " <> x
+
+-- This is for the testing the code for which
+-- we need to import Daml.Script
+
+testHello: Script ()
+testHello = script do
+    debug $ hello "Chris"
