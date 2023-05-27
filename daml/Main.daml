@@ -2,37 +2,22 @@ module Main where
 
 import Daml.Script
 
-type AssetId = ContractId Asset
+-- first function
+increment: Int -> Int
+increment x = x + 1
 
-template Asset
-  with
-    issuer : Party
-    owner  : Party
-    name   : Text
-  where
-    ensure name /= ""
-    signatory issuer
-    controller owner can
-      Give : AssetId
-        with
-          newOwner : Party
-        do
-          create this with
-            owner = newOwner
 
-setup : Script AssetId
-setup = script do
-  alice <- allocatePartyWithHint "Alice" (PartyIdHint "Alice")
-  bob <- allocatePartyWithHint "Bob" (PartyIdHint "Bob")
+-- second function
+add : Int -> Int -> Int 
+add x y = x + y
 
-  aliceTV <- submit alice do
-    createCmd Asset with
-      issuer = alice
-      owner = alice
-      name = "TV"
 
-  bobTV <- submit alice do
-    exerciseCmd aliceTV Give with newOwner = bob
-
-  submit bob do
-    exerciseCmd bobTV Give with newOwner = alice
+testFunctions: Script ()
+testFunctions = script do
+-- dollar is use to print result ,it is replacement of ()
+  debug $ increment 3
+-- here is the example where () replaced with $
+  debug (increment 4)
+  -- below is for second function add
+  debug $ add 3 3
+  debug (add 3 5)
